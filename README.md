@@ -7,3 +7,6 @@ Compress a string using numbers to represent repeating characters.
 
 ## decode-roman-numerals 
 Decode any roman numeral string into decimal.
+
+## pascals-triangle
+Print out pascal's triangle out to a given number of rows.
