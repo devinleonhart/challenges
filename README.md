@@ -10,3 +10,6 @@ Decode any roman numeral string into decimal.
 
 ## pascals-triangle
 Print out pascal's triangle out to a given number of rows.
+
+## random-number-generator
+Print an integer from a given range.
