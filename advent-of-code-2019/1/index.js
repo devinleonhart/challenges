@@ -15,11 +15,15 @@ function calculateExtraFuel(fuel) {
 }
 
 let inputs = require('./input.json');
+
 const modules = inputs.mass.map((value) => {
   return {"mass": value}
 });
+
 modules.forEach((module) => module.fuel = calculateFuel(module.mass));
+
 const fuelRequirement = modules.reduce((acc, curr) => {
   return acc + calculateExtraFuel(curr.fuel);
 }, 0);
+
 console.log(fuelRequirement);
