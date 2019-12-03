@@ -1,30 +1,52 @@
 let input = require('./input.json');
-let instructions = input.instructions.split(',');
-instructions.forEach((value, index) => {
-  instructions[index] = parseInt(value);
+let initialState = input.instructions.split(',');
+initialState.forEach((value, index) => {
+  initialState[index] = parseInt(value);
 });
+const sliceLength = {
+  1: 4,
+  2: 4
+};
+let memory = initialState.slice();
 
-// Per instructions, replace two values manually.
-instructions[1] = 12;
-instructions[2] = 2;
+function resetMemory() {
+  memory = initialState.slice();
+}
 
-function performInstruction(instruction) {
-  if(instruction[0] === 1) {
-    instructions[instruction[3]] = instructions[instruction[1]] + instructions[instruction[2]]
+function performInstruction(address) {
+  if(address[0] === 1) {
+    memory[address[3]] = memory[address[1]] + memory[address[2]]
   }
-  else if(instruction[0] === 2) {
-    instructions[instruction[3]] = instructions[instruction[1]] * instructions[instruction[2]]
+  else if(address[0] === 2) {
+    memory[address[3]] = memory[address[1]] * memory[address[2]]
   }
 }
 
+function runProgram(noun, verb) {
 
-for(let i = 0; i <= instructions.length; i++) {
-  // If the opcode is 99, end execution of instructions.
-  if (instructions[i] === 99) { break; }
-  // Assuming the input is correct, we can perform an operation.
-  performInstruction(instructions.slice(i, i+4))
-  i = i + 3;
+  memory[1] = noun;
+  memory[2] = verb;
+  
+  for(let i = 0; i <= memory.length; i++) {
+    // If the opcode is 99, end execution of instructions.
+    if (memory[i] === 99) { break; }
+    // Assuming the input is correct, we can perform an operation.
+    // Currently the number of parameters is always 3 if the opcode is not 99. Because this can change, we will look up
+    // the number of parameters to slice with sliceLength.
+    performInstruction(memory.slice(i, i + sliceLength[memory[i]]))
+    i = i + sliceLength[memory[i]] - 1;
+  }
+
+  // The answer is the noun and the verb together as one number. 12 + 2 = 1202 | 30 + 29 = 3029
+  if(memory[0] === 19690720) {
+    console.log("Answer found!");
+    console.log(noun, verb);
+  }
 }
 
-// The answer is whatever is at position 0 in the instructions after the program halts.
-console.log(instructions[0])
+for(let noun = 0; noun <= 99; noun++) {
+  for(let verb = 0; verb <= 99; verb++) {
+    runProgram(noun, verb);
+    resetMemory();
+  } 
+}
